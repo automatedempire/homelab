@@ -1,0 +1,13 @@
+---
+- name: Distribute keys
+  hosts: new
+  gather_facts: no
+  vars:
+   #- ansible_ssh_pass: raspberry
+   #- ansible_ssh_pass: ubuntu
+  tasks:
+   - name: Send key
+     authorized_key:
+       user: "{{ ansible_ssh_user }}"
+       state: present
+       key: "{{ lookup('file',lookup('env','HOME') + '/.ssh/id_ed25519.pub') }}"
