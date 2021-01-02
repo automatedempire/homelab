@@ -1,0 +1,3 @@
+---
+wifi_network_ssid: "{{ lookup('env','WIFI_SSID') }}"
+wifi_network_pass: "{{ lookup('env','WIFI_PASS') }}"

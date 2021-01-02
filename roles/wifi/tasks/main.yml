@@ -1,0 +1,12 @@
+---
+- name: Set WiFi region
+  lineinfile:
+    state: present
+    path: /etc/default/crda
+    regexp: '^REGDOMAIN='
+    line: REGDOMAIN=US
+- name: Add WiFi configuration
+  template:
+    src: 01-wifi.yaml.j2
+    dest: /etc/netplan/01-wifi.yaml
+  notify: netplan generate

@@ -1,0 +1,7 @@
+---
+- name: Setup WiFi
+  hosts: wifi
+  gather_facts: no
+  become: true
+  roles:
+  - wifi

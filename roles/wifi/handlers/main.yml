@@ -1,0 +1,18 @@
+---
+- name: Generate netplan config
+  become: true
+  command: netplan generate
+  listen: netplan generate
+  notify: netplan apply
+
+- name: Apply netplan config
+  become: true
+  command: netplan apply
+  listen: netplan apply
+  notify: reboot
+
+- name: Reboot to apply
+  become: true
+  listen: reboot
+  reboot:
+
