@@ -1,0 +1,37 @@
+localhost ansible_connection=local
+
+[Pis]
+leela
+bender
+farnsworth
+hermes
+scruffy
+fry
+zoidberg
+
+[ansible]
+farnsworth
+leela
+
+[PlanetExpress:children]
+PlanetExpressOffice
+PlanetExpressStaff
+
+[PlanetExpressOffice]
+farnsworth
+hermes
+scruffy
+
+[PlanetExpressStaff]
+fry
+zoidberg
+
+[new]
+#newRaspbianHost ansible_user=pi
+#newUbuntuHost ansible_user=ubuntu
+
+[new:vars]
+#ansible_user=pi
+#ansible_user=ubuntu
+
+[wifi]
