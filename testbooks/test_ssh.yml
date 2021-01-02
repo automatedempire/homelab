@@ -1,0 +1,15 @@
+---
+- name: "Test SSH port connectivity between all hosts"
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - debug:
+        msg: "{{ hostvars[item]['ansible_hostname'] }}"
+      with_items: "{{ groups['all'] }}"
+    - wait_for:
+        host: "{{ hostvars[item]['inventory_hostname'] }}"
+        port: 22
+        state: present
+      with_inventory_hostnames:
+        - all
+      delegate_to: localhost

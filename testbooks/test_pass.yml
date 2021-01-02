@@ -1,0 +1,18 @@
+---
+- name: Show ansible_become_pass
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - debug: var=ansible_become_pass
+
+- name: Set become password from environment if not set.
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - debug: var=ansible_become_pass
+      name: Test Debug
+      when: ansible_become_pass is defined
+    - set_fact:
+        ansible_become_pass: "{{ lookup('env','BECOMEPASS') }}"
+      when: ansible_become_pass is not defined
+
