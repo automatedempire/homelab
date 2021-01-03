@@ -1,0 +1,10 @@
+---
+- name: Install Ansible via pip
+  pip:
+    state: latest
+    name: ansible
+
+- name: Install sshpass for distribute_key
+  apt:
+    state: present
+    name: sshpass
