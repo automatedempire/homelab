@@ -1,0 +1,46 @@
+---
+- import_playbook: distribute_key.yml
+  tags:
+    - never
+    - keys
+
+- name: Setup WiFi
+  import_playbook: setup_wifi.yml
+  tags:
+    - never
+    - wifi
+
+- name: Set default OS user
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Set default OS user (Ubuntu)
+      set_fact:
+        default_os_user: ubuntu
+      when: ansible_lsb.id == "Ubuntu"
+    - name: Set default OS user (Raspbian)
+      set_fact:
+        default_os_user: pi
+      when: ansible_lsb.id == "Raspbian"
+
+- name: Basic Pi configuration
+  hosts: new
+  remote_user: "{{ default_os_user }}"
+  gather_facts: false
+  become: true
+  roles:
+    - pisetup
+
+- name: Perform common device setup
+  hosts: Pis
+  remote_user: "{{ pi_user }}"
+  become: true
+  roles:
+    - common
+
+- name: Create Ansible control nodes
+  hosts: ansible
+  remote_user: "{{ pi_user }}"
+  become: true
+  roles:
+    - ansible
