@@ -4,8 +4,7 @@
     - never
     - keys
 
-- name: Setup WiFi
-  import_playbook: setup_wifi.yml
+- import_playbook: setup_wifi.yml
   tags:
     - never
     - wifi
@@ -23,13 +22,13 @@
         default_os_user: pi
       when: ansible_lsb.id == "Raspbian"
 
-- name: Basic Pi configuration
+- name: Add a custom Pi system user
   hosts: new
   remote_user: "{{ default_os_user }}"
   gather_facts: false
   become: true
   roles:
-    - pisetup
+    - pi_user
 
 - name: Perform common device setup
   hosts: Pis
