@@ -1,0 +1,38 @@
+---
+- name: Update system
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+    upgrade: safe
+    autoremove: yes
+    autoclean: yes
+
+- name: Install common utilities
+  apt:
+    state: latest
+    name:
+    - git
+    - vim
+    - dos2unix
+    - cifs-utils
+    - nfs-common
+    - jq
+    - rename
+    - gnupg2
+    - net-tools
+    - wireless-tools
+
+- name: Install pip
+  apt:
+    state: latest
+    name:
+    - python3
+    - python3-pip
+
+- name: Install Pi shared network storage
+  mount:
+    state: mounted
+    opts: user,auto,_netdev
+    path: "{{ lookup('env','PISTORAGE') }}"
+    src: "{{ lookup('env','PISTORAGE_HOST') }}"
+    fstype: "{{ lookup('env','PISTORAGE_TYPE') }}"

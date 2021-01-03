@@ -1,0 +1,5 @@
+---
+- name: Common set up
+  include_tasks: common.yml
+- name: Set up seurity
+  include_tasks: security.yml

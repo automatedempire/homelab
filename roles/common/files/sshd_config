@@ -1,0 +1,53 @@
+###Basic options
+Protocol 2
+Port 22
+HostKey /etc/ssh/ssh_host_ed25519_key
+HostKey /etc/ssh/ssh_host_rsa_key
+ClientAliveInterval 300 #Ping clients every 5 minutes
+ClientAliveCountMax 2 #Disconnect if they don't respond to 2 consecutive pings
+
+###Crypto. These are very tight security settings and may not work if you are using older clients
+KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes256-ctr
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
+
+###Authentication
+LoginGraceTime 30
+PermitRootLogin no
+StrictModes yes
+#For more security, add publickey again and it will force you to have 2 separate keys to authenticate
+AuthenticationMethods publickey
+PubkeyAuthentication yes
+PasswordAuthentication no
+#Should be overkill not to permit empty passwords since we don't allow passwords
+PermitEmptyPasswords no
+#Only allow users in the ssh group to log in via ssh
+AllowGroups ssh
+
+#Don't allow rhosts
+IgnoreRhosts yes
+HostbasedAuthentication no
+ChallengeResponseAuthentication no
+UsePAM no
+MaxAuthTries 3
+MaxSessions 5
+
+###Logging
+SyslogFacility AUTH
+# LogLevel VERBOSE logs user's key fingerprint on login. Necessary to have a clear audit trail of which key was used to log in.
+LogLevel VERBOSE
+# Log sftp level file access (read/write/etc.) that would not be easily logged otherwise.
+Subsystem sftp /usr/lib/openssh/sftp-server -f AUTHPRIV -l INFO
+
+###Optional settings
+X11Forwarding yes
+X11DisplayOffset 10
+PrintMotd no
+#Banner /etc/issue.net
+PrintLastLog yes
+TCPKeepAlive yes
+
+#MaxStartups 10:30:60
+
+# Allow client to pass locale environment variables
+AcceptEnv LANG LC_*
