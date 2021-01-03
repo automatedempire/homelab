@@ -1,0 +1,10 @@
+---
+ - name: "Test Pi user vault"
+   hosts: localhost
+   gather_facts: no
+   tasks:
+    - debug:
+       var: pi_user
+    - debug:
+       var: pi_user_pass
+
