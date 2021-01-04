@@ -3,5 +3,7 @@
   hosts: wifi
   gather_facts: no
   become: true
-  roles:
-  - wifi
+  tasks:
+    - name: Setup WiFi
+      include_role:
+        name: wifi
