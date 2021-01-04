@@ -19,7 +19,7 @@
     password: "{{ pi_user_pass }}"
     generate_ssh_key: yes
     ssh_key_type: ed25519
-    ssh_key_files: .ssh/id_ed25519
+    ssh_key_file: .ssh/id_ed25519
     ssh_key_passphrase: "{{ lookup('env','KEY_PASS') }}"
 
 - name: Copy Ansible user's ssh key to the main user's authorized keys
