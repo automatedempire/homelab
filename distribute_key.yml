@@ -5,6 +5,7 @@
   vars:
    #- ansible_ssh_pass: raspberry
    #- ansible_ssh_pass: ubuntu
+   - ansible_ssh_pass: Changeme
   tasks:
    - name: Send key
      authorized_key:

@@ -45,3 +45,8 @@
     group: root
     mode: '0644'
   notify: sshd_restart
+
+- name: (Security) Set random password for default OS user
+  user:
+    name: "{{ default_os_user }}"
+    password: "{{ default_user_random_password }}"
