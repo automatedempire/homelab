@@ -1,7 +1,12 @@
 ---
-- name: Install Ansible via pip
+- name: Ensure the latest version of pip is installed
   pip:
     state: latest
+    name: pip
+
+- name: Install Ansible via pip
+  pip:
+    state: present
     name: ansible
 
 - name: Install sshpass for distribute_key
