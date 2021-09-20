@@ -12,6 +12,8 @@
 - name: Set default OS user
   hosts: all
   gather_facts: yes
+  tags:
+    - always
   tasks:
     - name: Set default OS user (Ubuntu)
       set_fact:
@@ -24,22 +26,31 @@
 
 - name: Add a custom Pi system user
   hosts: new
+  become: yes
   remote_user: "{{ default_os_user }}"
-  gather_facts: false
-  become: true
+  vars:
+    ansible_become_password: "{{ lookup('env', 'DEFAULT_PASS') }}"
   roles:
     - pi_user
 
 - name: Perform common device setup
   hosts: Pis
+  become: yes
   remote_user: "{{ pi_user }}"
-  become: true
+  vars:
+    ansible_become_password: "{{ lookup('env', 'BECOME_PASS') }}"
   roles:
+    - common
+  tags:
     - common
 
 - name: Create Ansible control nodes
   hosts: ansible
+  become: yes
   remote_user: "{{ pi_user }}"
-  become: true
+  vars:
+    ansible_become_password: "{{ lookup('env', 'BECOME_PASS') }}"
   roles:
+    - ansible
+  tags:
     - ansible
