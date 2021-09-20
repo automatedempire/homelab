@@ -36,3 +36,7 @@
     path: "{{ lookup('env','PISTORAGE') }}"
     src: "{{ lookup('env','PISTORAGE_HOST') }}"
     fstype: "{{ lookup('env','PISTORAGE_TYPE') }}"
+
+- name: Set device hostname to what is in the inventory
+  hostname:
+    name: "{{ inventory_hostname }}"
