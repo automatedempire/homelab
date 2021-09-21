@@ -1,0 +1,7 @@
+---
+k8s_version: 1.22.2-00
+k8s_cluster_ip: "{{ lookup('env','K8S_IP') }}"
+k8s_pod_cidr: "{{ lookup('env', 'K8S_POD_CIDR') }}"
+
+k8s_local_token: generated/k8s_cluster_token
+k8s_local_cert_key: generated/k8s_cluster_cert_key

@@ -1,0 +1,78 @@
+---
+# Config as of k8s version 1.21
+- name: Configure containerd pre-req modules to load at startup
+  copy:
+    src: containerd.conf
+    dest: /etc/modules-load.d/
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Load containerd pre-req modules now
+  modprobe:
+    state: present
+    name: "{{ item }}"
+  loop:
+    - overlay
+    - br_netfilter
+
+- name: Set sysctl params to persist across reboots
+  copy:
+    src: 99-kubernetes-cri.conf
+    dest: /etc/sysctl.d/
+    owner: root
+    group: root
+    mode: '0644'
+  notify: sysctl_now
+
+- name: Remove old packages
+  apt:
+    state: absent
+    name:
+      - containerd
+      - runc
+
+- name: Install support packages
+  apt:
+    state: present
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - gnupg
+      - software-properties-common
+
+- name: Add Docker Repo GPG key
+  # It gets mad about using curl, but it's necessary to feed into gpg.
+  shell: >
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+  args:
+    creates: /usr/share/keyrings/docker-archive-keyring.gpg
+    warn: false
+
+- name: Add Docker Repo
+  apt_repository:
+    state: present
+    repo: deb [arch=arm64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+  when: ansible_architecture == "aarch64"
+
+- name: Install containerd.io from Docker repo
+  apt:
+    update_cache: yes
+    state: latest
+    name: containerd.io
+
+- name: Create containerd directory
+  file:
+    state: directory
+    path: /etc/containerd
+
+- name: Get containerd defaults
+  command: containerd config default
+  register: containerd_config_default
+  changed_when: false
+
+- name: Write info to config.toml
+  copy:
+    content: "{{ containerd_config_default.stdout }}"
+    dest: /etc/containerd/config.toml
+  notify: restart_containerd

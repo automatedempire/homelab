@@ -54,3 +54,14 @@
     - ansible
   tags:
     - ansible
+
+- name: Provision Kubernetes nodes
+  become: yes
+  hosts: PlanetExpress
+  remote_user: "{{ pi_user }}"
+  vars:
+    ansible_become_password: "{{ lookup('env', 'BECOME_PASS') }}"
+  roles:
+    - kubernetes
+  tags:
+    - k8s

@@ -32,3 +32,5 @@ default_user_random_password: !vault |
           62616364666366376265396534336364646531346538396561316261643036333434
 
 ansible_become_pass: "{{ lookup('env','BECOME_PASS') }}"
+
+k8s_IP: "{{ lookup('env', 'K8S_IP') }}"
