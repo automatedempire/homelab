@@ -1,0 +1,52 @@
+---
+- hosts: all
+  vars_files:
+  - group_vars/Raspbian.yml
+  ignore_unreachable: true
+  ignore_errors: true
+  gather_facts: false
+  tasks:
+  - block:
+    - name:
+      command: /usr/bin/true
+    always:
+    - debug:
+        msg: "Raspbian {{ inventory_hostname }}"
+  - name: Try Raspbian config
+    debug:
+      var: ansible_user
+
+- hosts: all
+  ignore_unreachable: true
+  ignore_errors: true
+  vars_files:
+  - group_vars/Ubuntu.yml
+  gather_facts: false
+  tasks:
+  - name: Try Ubuntu config
+    command: /usr/bin/true
+  - debug:
+      var: ansible_ssh_pass
+
+
+---
+- hosts: none
+  vars_files:
+  - group_vars/Raspbian.yml
+  gather_facts: true
+  ignore_errors: yes
+  ignore_unreachable: yes
+  tasks:
+  - name: Try Raspbian config
+    command: /usr/bin/true
+
+- hosts: none
+  vars_files:
+  - group_vars/Ubuntu.yml
+  gather_facts: true
+  ignore_errors: yes
+  ignore_unreachable: yes
+  tasks:
+  - name: Try Ubuntu config
+    command: /usr/bin/true
+

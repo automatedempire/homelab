@@ -1,0 +1,11 @@
+---
+
+- name: Test single host runs
+  hosts: PlanetExpress
+  tasks:
+    - command: hostname
+      register: test_host
+      run_once: yes
+      when: inventory_hostname == groups['PlanetExpressOffice'][0]
+    - debug:
+        msg: "{{ test_host.stdout }}"

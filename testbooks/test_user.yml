@@ -1,0 +1,32 @@
+---
+- name: Test login info
+  hosts: new
+  gather_facts: no
+  become: yes
+  remote_user: ubuntu
+  vars:
+    ansible_become_password: "{{ lookup('env', 'DEFAULT_PASS') }}"
+  tasks:
+   - debug:
+      var: ansible_become_user
+   - debug:
+      var: ansible_ssh_user
+   - debug:
+      var: ansible_become_password
+   - shell: whoami > /tmp/usertest
+
+- name: Test other login
+  hosts: new
+  gather_facts: no
+  become: yes
+  remote_user: "{{ pi_user }}"
+  vars:
+    ansible_become_password: "{{ lookup('env', 'BECOME_PASS') }}"
+  tasks:
+   - debug:
+      var: ansible_become_user
+   - debug:
+      var: ansible_ssh_user
+   - debug:
+      var: ansible_become_password
+   - shell: whoami > /tmp/usertest2
